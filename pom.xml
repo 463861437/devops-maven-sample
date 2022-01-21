@@ -96,15 +96,37 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <fork>true</fork>
-                </configuration>
-            </plugin>
+        <!--加入下面两项配置-->
+           <executions>
+             <execution>
+               <goals>
+                 <goal>repackage</goal>
+               </goals>
+             </execution>
+           </executions>
+            <configuration>
+                 <includeSystemScope>true</includeSystemScope>
+            </configuration>
+      </plugin>
             <plugin>
-                <groupId>org.sonarsource.scanner.maven</groupId>
-                <artifactId>sonar-maven-plugin</artifactId>
-                <version>3.6.0.1398</version>
-            </plugin>
-        </plugins>
-    </build>
-</project>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>1.2.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                   </execution>
+                    <execution>
+                        <id>tag-image</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>tag</goal>
+                        </goals>
+                        <configuration>
+                            <image>${docker.repostory}/${docker.image.prefix}/${project.artifactId}:1.0.1</image>
+                            <newName>${docker.repostory}/${docker.image.prefix}/${project.artifactId}:1.0.1</newName>
+                        </configuration>
+                    </execution>
